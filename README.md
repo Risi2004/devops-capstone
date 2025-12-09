@@ -1,61 +1,42 @@
 # devops-capstone
 
 ## 🚀 Project Overview
-This project demonstrates a complete **DevOps CI/CD Pipeline** for a Node.js web application. The goal was to automate the build, deployment, and monitoring processes using industry-standard tools. 
+This project demonstrates a complete **DevOps Lifecycle** implementation for a Node.js web application. The goal was to replace manual deployment with a fully automated **Continuous Integration and Continuous Deployment (CI/CD)** pipeline.
 
-The project involves hosting a web application on an **AWS EC2** instance, containerizing it using **Docker**, automating deployment with **Jenkins**, and monitoring system health using **Prometheus** and **Grafana**. Additionally, automated log backups are handled via **Shell Scripting** and **Cron jobs**.
+The project hosts the application on an **AWS EC2** instance, uses **Docker** for containerization, **Jenkins** for automation, and **Prometheus & Grafana** for real-time monitoring.
 
 ---
 
-## 🛠️ Tech Stack & Tools Used
-* **Cloud Provider:** AWS EC2 (Ubuntu Linux)
+## 🛠️ Tech Stack & Tools
+* **Cloud Provider:** AWS EC2 (Ubuntu 22.04 LTS)
 * **Containerization:** Docker & Docker Hub
-* **CI/CD Automation:** Jenkins (Pipeline as Code)
-* **Source Control:** GitHub
+* **Orchestration:** Jenkins (Pipeline as Code)
 * **Application:** Node.js (v18) & Express.js
 * **Monitoring:** Prometheus (Metrics) & Grafana (Visualization)
-* **Scripting:** Bash Shell & Crontab
+* **Version Control:** GitHub
+* **Scripting:** Bash (Backups) & Cron (Scheduling)
 
 ---
 
-## 🏗️ Architecture
-The pipeline follows this workflow:
-1.  **Source:** Developer pushes code to GitHub.
-2.  **Build:** Jenkins detects changes, pulls code, and builds a Docker image.
-3.  **Release:** Jenkins pushes the tagged image to Docker Hub.
-4.  **Deploy:** Jenkins pulls the image on the production server and runs the container.
-5.  **Monitor:** Prometheus scrapes system metrics, and Grafana visualizes them.
+## ⚙️ CI/CD Flow Explained
+The automation is handled by a `Jenkinsfile` that executes the following pipeline stages:
+
+1.  **Build:** Jenkins triggers on a GitHub push, checks out the code, and builds a new Docker image.
+2.  **Login:** The pipeline securely authenticates with Docker Hub using encrypted credentials.
+3.  **Push:** The newly built image is tagged and pushed to the Docker Hub registry for versioning.
+4.  **Deploy:** Jenkins pulls the latest image onto the production server, stops the old container, and starts the new one on **Port 3000**.
+5.  **Monitor:** Prometheus continuously collects system metrics, which are visualized on a Grafana dashboard.
 
 ---
 
-## ⚙️ Key Features & Configuration
-
-### 1. CI/CD Pipeline (`Jenkinsfile`)
-The pipeline consists of four automated stages:
-* **Build Docker Image:** Packages the Node.js app.
-* **Login to Docker Hub:** Authenticates securely using Jenkins Credentials.
-* **Push Image:** Uploads the artifact to the registry (`risi2004/devops-capstone`).
-* **Deploy:** Stops the old container and restarts the app on Port 3000.
-
-### 2. Monitoring Setup
-* **Prometheus:** configured to run on Port **9090**.
-* **Grafana:** configured to run on Port **3001** (Changed from default 3000 to avoid conflict with the app).
-* **Dashboard:** Visualizes CPU, Memory, and Uptime.
-
-### 3. Automation (Backups)
-* **Script:** `backup.sh` compresses `/var/log/syslog` into a timestamped `.tar.gz` file.
-* **Cron Job:** Scheduled to run every minute (`* * * * *`) to ensure logs are regularly archived.
-
----
-
-## 🚀 How to Run the Project
+## 💻 Setup Instructions (Build & Run Locally)
+To test this application on your local machine (without Jenkins/AWS), follow these commands:
 
 ### Prerequisites
-* AWS Account
-* Docker Hub Account
-* GitHub Account
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+* Git installed.
 
-### Step 1: Clone the Repository
+### 1. Clone the Repository
 ```bash
 git clone [https://github.com/Risi2004/devops-capstone.git](https://github.com/Risi2004/devops-capstone.git)
 cd devops-capstone
